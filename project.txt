@@ -1,0 +1,64 @@
+#include <LiquidCrystal.h>
+#include <TimerOne.h>
+
+LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
+
+// lights for the cars
+int redLed = 13;
+int greenLed = 11;
+
+// lights for pedestrians
+int redLedPed = 33;
+int greenLedPed = 31;
+
+int buzzer = 22;
+int pushButton = 21;
+
+
+void setup(void) {
+  pinMode(redLed, OUTPUT);
+  pinMode(greenLed, OUTPUT);
+  pinMode(redLedPed, OUTPUT);
+  pinMode(greenLedPed, OUTPUT);
+  pinMode(buzzer, OUTPUT);
+  pinMode(pushButton, INPUT);
+
+  lcd.begin(16,2);
+
+  attachInterrupt(digitalPinToInterrupt(21), light, RISING);
+}
+
+void light()
+{
+
+  digitalWrite(greenLed, LOW);
+  digitalWrite(redLedPed, LOW);
+  digitalWrite(redLed, HIGH);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Go pedestrians");
+  tone(buzzer, 2900);
+
+  for(int i = 1; i <= 50; i++)
+  {
+    tone(buzzer, 2900);
+    digitalWrite(greenLedPed, HIGH);
+    delayMicroseconds(16000);
+    digitalWrite(greenLedPed, LOW);
+    delayMicroseconds(16000);
+    
+  }
+}
+
+void loop(void) {
+
+  noTone(buzzer);
+
+  lcd.clear();
+  
+  digitalWrite(greenLed, HIGH);
+  digitalWrite(redLedPed, HIGH);
+  digitalWrite(greenLedPed, LOW);
+  digitalWrite(redLed, LOW);
+
+}
